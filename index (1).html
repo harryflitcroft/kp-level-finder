@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Level</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fff; color: #333; padding: 40px 20px; max-width: 520px; margin: 0 auto; }
+h2 { color: #005E9E; font-size: 22px; font-weight: 600; margin-bottom: 28px; }
+label { display: block; font-size: 14px; font-weight: 600; color: #005E9E; margin-bottom: 6px; margin-top: 20px; }
+select { width: 100%; padding: 10px 12px; font-size: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; border: 1px solid #ccc; border-radius: 4px; background: #fff; color: #333; appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; cursor: pointer; }
+select:disabled { background-color: #f5f5f5; color: #999; cursor: not-allowed; }
+select:focus { outline: none; border-color: #005E9E; }
+#result { margin-top: 32px; padding: 20px; background: #f0f6fb; border-left: 4px solid #005E9E; border-radius: 4px; display: none; }
+#result p { font-size: 18px; font-weight: 600; color: #005E9E; }
+</style>
+</head>
+<body>
+<h2>Find Your Level</h2>
+<label for="serviceLine">What area do you work in?</label>
+<select id="serviceLine" onchange="updateRoles()">
+<option value="">Select your service line</option>
+</select>
+<label for="role">What is your current role?</label>
+<select id="role" onchange="showResult()" disabled>
+<option value="">Select your role</option>
+</select>
+<div id="result"><p id="resultText"></p></div>
+<script>
+var data = {
+"Business Services": {"Undergraduate Accountant":1,"Graduate Accountant":1,"Accountant (Not CA Qualified)":1,"Accountant (CA Qualified)":2,"Intermediate Accountant":2,"Senior Accountant":3,"Assistant Manager":3,"Client Manager":4,"Senior Client Manager":4,"Client Director":4,"Senior Client Director":4},
+"Audit": {"Undergraduate Auditor":1,"Graduate Auditor":1,"Intermediate Auditor":2,"Senior Auditor":3,"Assistant Audit Manager":3,"Audit Manager":4,"Client Director":4,"Senior Client Director":4},
+"Strata": {"Undergraduate Strata Auditor":1,"Graduate Strata Auditor":1,"Strata Auditor":2,"Senior Strata Auditor":3,"Strata Manager":4,"Client Director":4,"Senior Client Director":4},
+"SMSF": {"Undergraduate SMSF Accountant":1,"Graduate SMSF Accountant":1,"Junior SMSF Accountant":1,"SMSF Accountant":2,"Senior SMSF Accountant":3,"SMSF Manager":4,"Client Director - SMSF":4,"Senior Client Director - SMSF":4},
+"Tax Consulting": {"Consultant":1,"Senior Consultant":2,"Manager":3,"Senior Manager":4,"Client Director":4,"Senior Client Director":4},
+"Bookkeeping": {"Undergraduate Bookkeeper":1,"Graduate Bookkeeper":1,"Junior Bookkeeper":1,"Bookkeeper - Light":2,"Bookkeeper - Medium":2,"Bookkeeper - Heavy":2,"Senior Bookkeeper":3,"Bookkeeping Manager":4,"Head of Bookkeeping":4},
+"Administration": {"Reception/Front Desk Admin":1,"Administration Assistant (0-3 years)":1,"Administration Assistant (3-5 years)":2,"Administration Assistant (5+ years)":3,"Senior Administration Assistant":4,"Business Manager":4}
+};
+var slSelect = document.getElementById('serviceLine');
+var roleSelect = document.getElementById('role');
+var resultDiv = document.getElementById('result');
+var resultText = document.getElementById('resultText');
+Object.keys(data).forEach(function(sl) {
+var opt = document.createElement('option');
+opt.value = sl;
+opt.textContent = sl;
+slSelect.appendChild(opt);
+});
+function updateRoles() {
+roleSelect.innerHTML = '<option value="">Select your role</option>';
+resultDiv.style.display = 'none';
+var sl = slSelect.value;
+if (!sl) { roleSelect.disabled = true; return; }
+roleSelect.disabled = false;
+Object.keys(data[sl]).forEach(function(role) {
+var opt = document.createElement('option');
+opt.value = role;
+opt.textContent = role;
+roleSelect.appendChild(opt);
+});
+}
+function showResult() {
+var sl = slSelect.value;
+var role = roleSelect.value;
+if (!sl || !role) { resultDiv.style.display = 'none'; return; }
+var level = data[sl][role];
+resultText.textContent = 'You are at Level ' + level;
+resultDiv.style.display = 'block';
+}
+</script>
+</body>
+</html>
