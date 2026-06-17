@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Development Level Guide</title>
+    <style>
+        body {font-family: Segoe UI, Arial; background:#f5f6f8; padding:40px;}
+        .container {max-width:650px;margin:auto;background:#fff;padding:30px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+        h1 {color:#005E9E;}
+        select {width:100%;padding:12px;margin-top:10px;border-radius:8px;border:1px solid #ccc;}
+        .result {margin-top:25px;padding:20px;border-radius:10px;display:none;background:#f0f6fb;}
+        .level {font-size:22px;font-weight:bold;color:#005E9E;}
+    </style>
+
+    <script>
+        const levelDescriptions = {
+            1: "Core professional discipline",
+            2: "Working effectively with others",
+            3: "Leading teams and delivering outcomes",
+            4: "Driving organisational performance"
+        };
+
+        function updateOptions() {
+            let c = document.getElementById("country").value;
+            let d = document.getElementById("department");
+
+            d.innerHTML = '';
+            d.style.display = "none";
+            document.getElementById("role").style.display = "none";
+
+            if (c === "IE") {
+                d.style.display = "block";
+                d.innerHTML = '<option>All</option>';
+            }
+
+            if (c === "AU" || c === "US") {
+                updateRoles();
+            }
+        }
+
+        function updateRoles() {
+            let c = document.getElementById("country").value;
+            let r = document.getElementById("role");
+
+            r.innerHTML = '';
+            r.style.display = "block";
+
+            if (c === "IE") {
+                r.innerHTML = `
+                <option value="1">Trainee Accountant</option>
+                <option value="2">Accounts Assistant</option>
+                <option value="3">Senior Accountant</option>
+                <option value="4">Consultant</option>
+                <option value="4">Manager</option>
+                <option value="4">Senior Manager</option>
+                <option value="4">Partner</option>`;
+            }
+
+            if (c === "AU") {
+                r.innerHTML = `
+                <option value="1">Graduate Accountant</option>
+                <option value="2">Intermediate Accountant</option>
+                <option value="3">Senior Accountant</option>
+                <option value="4">Manager</option>`;
+            }
+
+            if (c === "US") {
+                r.innerHTML = `
+                <option value="1">Staff Accountant</option>
+                <option value="2">Senior Accountant</option>
+                <option value="3">Manager</option>
+                <option value="4">Partner</option>`;
+            }
+        }
+
+        function findLevel() {
+            let role = document.getElementById("role").value;
+            document.getElementById("level").innerText = "Level " + role;
+            document.getElementById("desc").innerText = levelDescriptions[role];
+            document.getElementById("result").style.display = "block";
+        }
+    </script>
+</head>
+
+<body>
+<div class="container">
+<h1>Development Level Guide</h1>
+
+<select id="country" onchange="updateOptions()">
+<option value="">Select country</option>
+<option value="AU">Australia</option>
+<option value="US">USA</option>
+<option value="IE">Ireland</option>
+</select>
+
+<select id="department" onchange="updateRoles()" style="display:none;"></select>
+
+<select id="role" onchange="findLevel()" style="display:none;"></select>
+
+<div id="result" class="result">
+<div id="level" class="level"></div>
+<div id="desc"></div>
+</div>
+
+</div>
+</body>
+</html>
